@@ -29,7 +29,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }: AuthProv
   };
 
   useEffect(() => {
-    const publicPaths = ['/forms/form-elements','/forms/completion'];
+    const publicPaths = ['/forms/form-elements','/forms/completion', '/', '/signup'];
 
     if (!isAuthenticated && !publicPaths.includes(pathname)) {
       router.push('/');
