@@ -5,6 +5,8 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import SidebarLinkGroup from "./SidebarLinkGroup";
+import { faHome, faAdd } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -61,7 +63,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   return (
     <aside
       ref={sidebar}
-      className={`absolute left-0 top-0 z-9999 flex h-screen w-72.5 flex-col overflow-y-hidden bg-white duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${
+      className={`absolute left-0 top-0 z-9999 flex h-screen w-72.5 flex-col overflow-y-hidden bg-graydark duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${
         sidebarOpen ? "translate-x-0" : "-translate-x-full"
       }`}
     >
@@ -96,15 +98,15 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
         <nav className="mt-5 px-4 py-4 lg:mt-9 lg:px-6">
           {/* <!-- Menu Group --> */}
           <div>
-            <div>
+            {/*<div>
               <h3 className=" ml-4 text-md font-bold text-bodydark2">
                 Saldo Disponível
               </h3>
               <span className="mb-4 ml-4 text-xl font-medium text-lime-600">
                 R$ 4.000,00
               </span>
-            </div>
-            <h3 className="mb-4 mt-8 ml-4 text-sm font-semibold text-bodydark2">
+    </div>*/}
+            <h3 className="mb-4 ml-4 mt-8 text-sm font-semibold text-bodydark2">
               MENU
             </h3>
 
@@ -182,15 +184,32 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                           !open && "hidden"
                         }`}
                       >
-                        <ul className="mb-5.5 mt-4 flex flex-col gap-2.5 pl-6">
+                        <ul className="mb-5.5 mt-4 flex flex-col gap-2.5 pl-1">
                           <li>
                             <Link
-                              href="/"
-                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
-                                pathname === "/" && "text-white"
-                              }`}
+                              href="/dashboard"
+                              className={`border-gray-300 hover:bg-gray-700 group relative flex items-center gap-2.5 rounded-md border px-4 py-2 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${pathname === "/dashboard" ? "bg-white text-black" : ""}`}
                             >
+                              <FontAwesomeIcon
+                                icon={faHome}
+                                className="text-bodydark2 duration-300 ease-in-out group-hover:text-white"
+                              />
                               Dashboard
+                            </Link>
+                          </li>
+                        </ul>
+
+                        <ul className="mb-5.5 mt-4 flex flex-col gap-2.5 pl-1">
+                          <li>
+                            <Link
+                              href="/products"
+                              className={`border-gray-300 hover:bg-gray-700 group relative flex items-center gap-2.5 rounded-md border px-4 py-2 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${pathname === "/products" ? "bg-white text-black" : ""}`}
+                            >
+                              <FontAwesomeIcon
+                                icon={faAdd}
+                                className="text-bodydark2 duration-300 ease-in-out group-hover:text-white"
+                              />
+                              Produtos
                             </Link>
                           </li>
                         </ul>

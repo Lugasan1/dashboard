@@ -1,6 +1,7 @@
 import { ApexOptions } from "apexcharts";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
+import { Refund } from "./charts";
 
 interface ChartThreeState {
   series: number[];
@@ -60,6 +61,17 @@ const ChartThree: React.FC = () => {
     }));
   };
   handleReset;
+
+  const GetRefund = async() => {
+     const response = await Refund("100");
+     if(response.isOk){
+        console.log(response.message)
+     }
+  }
+
+  useEffect(() => {
+GetRefund()
+  }, [])
 
   return (
     <>

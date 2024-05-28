@@ -1,65 +1,61 @@
+"use client"
 import Image from "next/image";
 import { Product } from "@/types/product";
+import { useEffect, useState } from "react";
+import { Products } from "./products";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCopy } from "@fortawesome/free-solid-svg-icons";
+import { toast } from "react-toastify";
 
-const productData: Product[] = [
-  {
-    image: "/images/product/product-01.png",
-    name: "Apple Watch Series 7",
-    category: "Electronics",
-    price: 296,
-    sold: 22,
-    profit: 45,
-  },
-  {
-    image: "/images/product/product-02.png",
-    name: "Macbook Pro M1",
-    category: "Electronics",
-    price: 546,
-    sold: 12,
-    profit: 125,
-  },
-  {
-    image: "/images/product/product-03.png",
-    name: "Dell Inspiron 15",
-    category: "Electronics",
-    price: 443,
-    sold: 64,
-    profit: 247,
-  },
-  {
-    image: "/images/product/product-04.png",
-    name: "HP Probook 450",
-    category: "Electronics",
-    price: 499,
-    sold: 72,
-    profit: 103,
-  },
-];
+interface ProductDataReq {
+  id: string;
+  name: string;
+  image: string;
+  description: string;
+  price: number; 
+  link: string;
+}
 
 const TableTwo = () => {
+  const [productData, setProductData] = useState<ProductDataReq[]>([]);
+
+  const GetProducts = async () => {
+    const response = await Products();
+    if (response.isOk) {
+      console.log(response.message);
+      setProductData(response.message);
+    }
+  };
+
+  useEffect(() => {
+    GetProducts();
+  }, []);
+
+  const copyToClipboard = (link: string, product: string) => {
+    navigator.clipboard.writeText(link);
+    toast.success(`Link do produto: ${product} copiado`);
+  };
+
   return (
     <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
       <div className="px-4 py-6 md:px-6 xl:px-7.5">
         <h4 className="text-xl font-semibold text-black dark:text-white">
-          Top Products
+          Produtos cadastrados
         </h4>
       </div>
 
       <div className="grid grid-cols-6 border-t border-stroke px-4 py-4.5 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5">
         <div className="col-span-3 flex items-center">
-          <p className="font-medium">Product Name</p>
+          <p className="font-medium">Produto</p>
         </div>
         <div className="col-span-2 hidden items-center sm:flex">
-          <p className="font-medium">Category</p>
+          <p className="font-medium">Descrição</p>
         </div>
         <div className="col-span-1 flex items-center">
-          <p className="font-medium">Price</p>
+          <p className="font-medium">Preço</p>
         </div>
         <div className="col-span-1 flex items-center">
-          <p className="font-medium">Sold</p>
-        </div>
-        <div className="col-span-1 flex items-center">
-          <p className="font-medium">Profit</p>
+          <p className="font-medium">Link do checkout</p>
         </div>
       </div>
 
@@ -85,19 +81,32 @@ const TableTwo = () => {
           </div>
           <div className="col-span-2 hidden items-center sm:flex">
             <p className="text-sm text-black dark:text-white">
-              {product.category}
+              {product.description}
             </p>
           </div>
           <div className="col-span-1 flex items-center">
             <p className="text-sm text-black dark:text-white">
-              ${product.price}
+              ${" "}
+              {(product.price / 100).toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+              })}
             </p>
           </div>
           <div className="col-span-1 flex items-center">
-            <p className="text-sm text-black dark:text-white">{product.sold}</p>
-          </div>
-          <div className="col-span-1 flex items-center">
-            <p className="text-sm text-meta-3">${product.profit}</p>
+            <p className="text-sm text-black dark:text-white">
+              {product.link.substring(0, 10)}
+              <button
+                onClick={() =>
+                  copyToClipboard(
+                    `${process.env.NEXT_PUBLIC_DOMAIN}forms/form-elements?client=${product.link}&productName=${product.name}&price=${product.price}&image=${product.image}`,
+                    product.name
+                  )
+                }
+                className="ml-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
+              >
+                <FontAwesomeIcon icon={faCopy} />
+              </button>
+            </p>
           </div>
         </div>
       ))}

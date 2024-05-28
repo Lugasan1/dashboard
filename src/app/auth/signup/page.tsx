@@ -1,46 +1,98 @@
-import React from "react";
+"use client"
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-
-import { Metadata } from "next";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+import { PostRegister } from "./register";
 
-export const metadata: Metadata = {
-  title: "Next.js SignUp Page | TailAdmin - Next.js Dashboard Template",
-  description: "This is Next.js SignUp Page TailAdmin Dashboard Template",
-  // other metadata
-};
+interface RegisterResponse {
+  token: string;
+  auth: boolean;
+  error: string;
+}
+
+
 
 const SignUp: React.FC = () => {
-  return (
-    <DefaultLayout>
-      <Breadcrumb pageName="Sign Up" />
+  const router = useRouter();
+  const [name, setName] = useState<string>("")
+  const [email, setEmail] = useState<string>("")
+  const [password, setPassword] = useState<string>("")
+  const [password1, setPassword1] = useState<string>("")
 
-      <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+ 
+  const CreateAccount = async (name: string, email: string, password: string) => {
+
+    if (name === "") {
+      return toast.warn("campo Nome não pode estar vazio", {
+        position: "top-right"
+      });
+    }
+ 
+   if (email === "") {
+     return toast.warn("campo Email não pode estar vazio", {
+       position: "top-right"
+     });
+   }
+
+   if (password1 === "") {
+    return toast.warn("campo Senha não pode estar vazio", {
+      position: "top-right"
+    });
+  }
+
+  if (password1 != password) {
+    return toast.warn("as Senhas não se coincidem", {
+      position: "top-right"
+    });
+  }
+   
+   if (password === "") {
+     return toast.warn("campo Senha não pode estar vazio", {
+       position: "top-right"
+     });
+   }
+ 
+   const response = await PostRegister(name, email, password);
+ 
+   if (response.isOk) {
+     localStorage.setItem("@NativePay:id", response.message.id);
+     router.push("/");
+   } else {
+     toast.error("Falha no cadastro: " + (typeof response.message === 'string' ? response.message : response.message.error), {
+       position: "top-right"
+     });
+   }
+ };
+
+  return (
+    <div className="p-5">
+      {/*<Breadcrumb pageName="Cadastro" />*/}
+
+      <div className="rounded-sm border border-stroke bg-graydark shadow-default dark:border-strokedark dark:bg-boxdark">
         <div className="flex flex-wrap items-center">
           <div className="hidden w-full xl:block xl:w-1/2">
             <div className="px-26 py-17.5 text-center">
               <Link className="mb-5.5 inline-block" href="/">
                 <Image
                   className="hidden dark:block"
-                  src={"/images/logo/logo.svg"}
+                  src={"/images/logo/logo.png"}
                   alt="Logo"
                   width={176}
                   height={32}
                 />
                 <Image
                   className="dark:hidden"
-                  src={"/images/logo/logo-dark.svg"}
+                  src={"/images/logo/logo.png"}
                   alt="Logo"
                   width={176}
                   height={32}
                 />
               </Link>
-              <p className="2xl:px-20">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit
-                suspendisse.
-              </p>
+         
 
               <span className="mt-15 inline-block">
                 <svg
@@ -169,21 +221,22 @@ const SignUp: React.FC = () => {
 
           <div className="w-full border-stroke dark:border-strokedark xl:w-1/2 xl:border-l-2">
             <div className="w-full p-4 sm:p-12.5 xl:p-17.5">
-              <span className="mb-1.5 block font-medium">Start for free</span>
-              <h2 className="mb-9 text-2xl font-bold text-black dark:text-white sm:text-title-xl2">
-                Sign Up to TailAdmin
+              <span className="mb-1.5 block font-medium">Criar uma conta</span>
+              <h2 className="mb-9 text-2xl font-bold text-white dark:text-white sm:text-title-xl2">
+                Cadastro
               </h2>
 
               <form>
                 <div className="mb-4">
-                  <label className="mb-2.5 block font-medium text-black dark:text-white">
-                    Name
+                  <label className="mb-2.5 block font-medium text-white dark:text-white">
+                    Nome
                   </label>
                   <div className="relative">
                     <input
+                    onChange={(e) => setName(e.target.value)}
                       type="text"
-                      placeholder="Enter your full name"
-                      className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                      placeholder="Insira seu nome completo"
+                      className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-white outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                     />
 
                     <span className="absolute right-4 top-4">
@@ -211,14 +264,15 @@ const SignUp: React.FC = () => {
                 </div>
 
                 <div className="mb-4">
-                  <label className="mb-2.5 block font-medium text-black dark:text-white">
+                  <label className="mb-2.5 block font-medium text-white dark:text-white">
                     Email
                   </label>
                   <div className="relative">
                     <input
+                     onChange={(e) => setEmail(e.target.value)}
                       type="email"
-                      placeholder="Enter your email"
-                      className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                      placeholder="Insira seu Email"
+                      className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-white outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                     />
 
                     <span className="absolute right-4 top-4">
@@ -242,14 +296,15 @@ const SignUp: React.FC = () => {
                 </div>
 
                 <div className="mb-4">
-                  <label className="mb-2.5 block font-medium text-black dark:text-white">
-                    Password
+                  <label className="mb-2.5 block font-medium text-white dark:text-white">
+                    Senha
                   </label>
                   <div className="relative">
                     <input
+                     onChange={(e) => setPassword(e.target.value)}
                       type="password"
-                      placeholder="Enter your password"
-                      className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                      placeholder="Insira sua senha"
+                      className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-white outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                     />
 
                     <span className="absolute right-4 top-4">
@@ -277,14 +332,15 @@ const SignUp: React.FC = () => {
                 </div>
 
                 <div className="mb-6">
-                  <label className="mb-2.5 block font-medium text-black dark:text-white">
-                    Re-type Password
+                  <label className="mb-2.5 block font-medium text-white dark:text-white">
+                    Confirmar Senha
                   </label>
                   <div className="relative">
                     <input
+                     onChange={(e) => setPassword1(e.target.value)}
                       type="password"
-                      placeholder="Re-enter your password"
-                      className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                      placeholder="Reensira sua senha"
+                      className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-white outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                     />
 
                     <span className="absolute right-4 top-4">
@@ -313,13 +369,14 @@ const SignUp: React.FC = () => {
 
                 <div className="mb-5">
                   <input
-                    type="submit"
-                    value="Create account"
+                  onClick={() => CreateAccount(name, email, password)}
+                    type="button"
+                    value="Criar Conta"
                     className="w-full cursor-pointer rounded-lg border border-primary bg-primary p-4 text-white transition hover:bg-opacity-90"
                   />
                 </div>
 
-                <button className="flex w-full items-center justify-center gap-3.5 rounded-lg border border-stroke bg-gray p-4 hover:bg-opacity-50 dark:border-strokedark dark:bg-meta-4 dark:hover:bg-opacity-50">
+                {/*<button className="flex w-full items-center justify-center gap-3.5 rounded-lg border border-stroke bg-gray p-4 hover:bg-opacity-50 dark:border-strokedark dark:bg-meta-4 dark:hover:bg-opacity-50">
                   <span>
                     <svg
                       width="20"
@@ -354,13 +411,13 @@ const SignUp: React.FC = () => {
                     </svg>
                   </span>
                   Sign up with Google
-                </button>
+  </button>*/}
 
                 <div className="mt-6 text-center">
                   <p>
-                    Already have an account?{" "}
-                    <Link href="/auth/signin" className="text-primary">
-                      Sign in
+                    Já tem uma conta?{" "}
+                    <Link href="/auth/signin" className="text-bodydark2">
+                      Entrar
                     </Link>
                   </p>
                 </div>
@@ -369,7 +426,7 @@ const SignUp: React.FC = () => {
           </div>
         </div>
       </div>
-    </DefaultLayout>
+    </div>
   );
 };
 
