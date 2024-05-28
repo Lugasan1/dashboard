@@ -1,12 +1,12 @@
 "use client"
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import { PostLogin } from "./auth";
 import { useRouter } from 'next/navigation'
-import {  toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 interface LoginResponse {
   token: string;
@@ -16,38 +16,45 @@ interface LoginResponse {
 
 const SignIn: React.FC = () => {
   const router = useRouter();
- const [email, setEmail] = useState<string>("")
- const [password, setPassword] = useState<string>("")
+  const [email, setEmail] = useState<string>("")
+  const [password, setPassword] = useState<string>("")
+  const [logged, setLogged] = useState(false)
 
- const isLoginResponse = (message: any): message is LoginResponse => {
-  return (message as LoginResponse).token !== undefined;
-};
+  const isLoginResponse = (message: any): message is LoginResponse => {
+    return (message as LoginResponse).token !== undefined;
+  };
 
- const SignIn = async (email: string, password: string) => {
+  const SignIn = async (email: string, password: string) => {
 
-  if (email === "") {
-    return toast.warn("campo Email não pode estar vazio", {
-      position: "top-right"
-    });
-  }
-  
-  if (password === "") {
-    return toast.warn("campo Senha não pode estar vazio", {
-      position: "top-right"
-    });
-  }
+    if (email === "") {
+      return toast.warn("campo Email não pode estar vazio", {
+        position: "top-right"
+      });
+    }
 
-  const response = await PostLogin(email, password);
+    if (password === "") {
+      return toast.warn("campo Senha não pode estar vazio", {
+        position: "top-right"
+      });
+    }
 
-  if (response.isOk && isLoginResponse(response.message)) {
-    localStorage.setItem("@NativePay:token", response.message.token);
-    router.push("/dashboard");
-  } else {
-    toast.error("Falha no login: " + (typeof response.message === 'string' ? response.message : response.message.error), {
-      position: "top-right"
-    });
-  }
-};
+    const response = await PostLogin(email, password);
+
+    if (response.isOk && isLoginResponse(response.message)) {
+      localStorage.setItem("@NativePay:token", response.message.token);
+      setLogged(true)
+    } else {
+      toast.error("Falha no login: " + (typeof response.message === 'string' ? response.message : response.message.error), {
+        position: "top-right"
+      });
+    }
+  };
+
+  useEffect(() => {  
+    if (logged === true) {  
+    router.push("/dashboard");  
+    }  
+  }, [logged,router]);
 
 
   return (
@@ -214,7 +221,7 @@ const SignIn: React.FC = () => {
                   </label>
                   <div className="relative">
                     <input
-                       onChange={(e) => setEmail(e.target.value)}
+                      onChange={(e) => setEmail(e.target.value)}
                       type="email"
                       placeholder="Insira seu email"
                       className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-white outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
@@ -245,12 +252,12 @@ const SignIn: React.FC = () => {
                     Senha
                   </label>
                   <div className="relative">
-                  <input
-  onChange={(e) => setPassword(e.target.value)}
-  type="password"
-  placeholder="******"
-  className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-white outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-/>
+                    <input
+                      onChange={(e) => setPassword(e.target.value)}
+                      type="password"
+                      placeholder="******"
+                      className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-white outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                    />
 
                     <span className="absolute right-4 top-4">
                       <svg

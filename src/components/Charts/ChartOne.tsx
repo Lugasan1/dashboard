@@ -1,7 +1,8 @@
 import { ApexOptions } from "apexcharts";
 import React, { useEffect, useState } from "react";
-import ReactApexChart from "react-apexcharts";
 import { Products, Refund } from "./charts";
+import dynamic from "next/dynamic";
+const ReactApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 const initialOptions: ApexOptions = {
   legend: {

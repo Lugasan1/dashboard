@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
@@ -22,6 +22,7 @@ const SignUp: React.FC = () => {
   const [email, setEmail] = useState<string>("")
   const [password, setPassword] = useState<string>("")
   const [password1, setPassword1] = useState<string>("")
+  const [backRoute, setBackRoute] = useState(false)
 
  
   const CreateAccount = async (name: string, email: string, password: string) => {
@@ -60,13 +61,19 @@ const SignUp: React.FC = () => {
  
    if (response.isOk) {
      localStorage.setItem("@NativePay:id", response.message.id);
-     router.push("/");
+     setBackRoute(true)
    } else {
      toast.error("Falha no cadastro: " + (typeof response.message === 'string' ? response.message : response.message.error), {
        position: "top-right"
      });
    }
  };
+
+ useEffect(() => {  
+  if (backRoute === true) {  
+  router.push("/");  
+  }  
+}, [backRoute,router]);
 
   return (
     <div className="p-5">

@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
@@ -8,14 +8,17 @@ import { addProduct } from "./product";
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { useRouter } from "next/navigation";
 
 const Products: React.FC = () => {
+  const router = useRouter()
   const [showModal, setShowModal] = useState(false);
   const [nome, setNome] = useState("");
   const [descricao, setDescricao] = useState("");
   const [preco, setPreco] = useState("");
   const [quantidade, setQuantidade] = useState("");
   const [imagem, setImagem] = useState<File | null>(null);
+  const [host, setHost] = useState(false)
 
   const toggleModal = () => {
     setShowModal(!showModal);
@@ -54,11 +57,19 @@ const Products: React.FC = () => {
 
     const response = await addProduct(nome, descricao, preco, quantidade, imagem)
     if(response.isOk){
-      let host = process.env.NEXT_PUBLIC_DOMAIN+"/products"
-       window.location.href=`${host}`
+     
+      setHost(true)
      }
     toggleModal();
   };
+  
+  useEffect(() => {  
+    if (host === true) {  
+      let host = process.env.NEXT_PUBLIC_DOMAIN+"/products"
+      router.push(host)
+    }  
+  }, [host,router]);
+  
 
   return (
     <DefaultLayout>

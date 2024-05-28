@@ -24,12 +24,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }: AuthProv
   const logout = () => {
     localStorage.removeItem('@NativePay:token');
     setIsAuthenticated(false);
-    router.push('/');
+    //router.push('/');
   };
 
-  if (!isAuthenticated) {
-    router.push('/'); 
-  }
+  useEffect(() => {  
+    if (!isAuthenticated) {  
+    router.push("/");  
+    }  
+  }, [isAuthenticated,router]);
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, logout }}>

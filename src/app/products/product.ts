@@ -16,7 +16,7 @@ export const addProduct = async (
     const formData = new FormData();
     formData.append("name", name);
     formData.append("description", description);
-    formData.append("priceProduct", price);
+    formData.append("priceProduct", price.replaceAll(",", ""));
     formData.append("quantity", quantity);
     formData.append("image", image);
     formData.append("currency", "brl");
