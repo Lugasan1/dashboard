@@ -42,7 +42,7 @@ const FormLayout = () => {
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: `${process.env.NEXT_PUBLIC_DOMAIN}/completion`,
+        return_url: `${process.env.NEXT_PUBLIC_DOMAIN}/forms/completion`,
       },
     });
 

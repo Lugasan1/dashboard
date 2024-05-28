@@ -66,7 +66,7 @@ const Products: React.FC = () => {
   useEffect(() => {  
     if (host === true) {  
       let host = process.env.NEXT_PUBLIC_DOMAIN+"/products"
-      router.push(host)
+      router.refresh
     }  
   }, [host,router]);
   
