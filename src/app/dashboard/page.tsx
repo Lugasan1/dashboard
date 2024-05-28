@@ -15,10 +15,15 @@ const Dashboard: React.FC = () => {
   return (
 
 <DefaultLayout>
-      {/* Conteúdo do Dashboard */}
       <div className=" grid-cols-content gap-4 md:gap-6 2xl:gap-7.5 mt-4 md:mt-6 2xl:mt-7.5">
+        <div className="mt-5">
         <ChartOne />
-        {/*<ChartThree  />*/}
+        </div>
+
+        <div className="mt-5">
+        <ChartThree  />
+        </div>
+        
       </div>
       </DefaultLayout>
   );

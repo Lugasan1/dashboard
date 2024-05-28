@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname  } from 'next/navigation';
 
 type AuthContextType = {
   isAuthenticated: boolean;
@@ -15,6 +15,7 @@ type AuthProviderProps = {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }: AuthProviderProps) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     const token = localStorage.getItem('@NativePay:token');
@@ -27,11 +28,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }: AuthProv
     //router.push('/');
   };
 
-  useEffect(() => {  
-    if (!isAuthenticated) {  
-    router.push("/");  
-    }  
-  }, [isAuthenticated,router]);
+  useEffect(() => {
+    const publicPaths = ['/forms/form-elements','/forms/completion'];
+
+    if (!isAuthenticated && !publicPaths.includes(pathname)) {
+      router.push('/');
+    }
+  }, [isAuthenticated, pathname, router]);
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, logout }}>
