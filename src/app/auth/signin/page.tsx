@@ -63,7 +63,7 @@ const SignIn: React.FC = () => {
     <div className="p-5">
       {/*<Breadcrumb pageName="Acesso" />*/}
 
-      <div className="rounded-sm border border-stroke bg-graydark shadow-default dark:border-strokedark dark:bg-boxdark">
+      <div className="flex items-center justify-center rounded-sm dark:bg-boxdark">
         <div className="flex flex-wrap items-center">
           <div className="hidden w-full xl:block xl:w-1/2">
             <div className="px-26 py-17.5 text-center">
