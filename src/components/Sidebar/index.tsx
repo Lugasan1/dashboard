@@ -98,14 +98,14 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
         <nav className="mt-5 px-4 py-4 lg:mt-9 lg:px-6">
           {/* <!-- Menu Group --> */}
           <div>
-            {/*<div>
+           <div>
               <h3 className=" ml-4 text-md font-bold text-bodydark2">
                 Saldo Disponível
               </h3>
               <span className="mb-4 ml-4 text-xl font-medium text-lime-600">
                 R$ 4.000,00
               </span>
-    </div>*/}
+    </div>
             <h3 className="mb-4 ml-4 mt-8 text-sm font-semibold text-bodydark2">
               MENU
             </h3>

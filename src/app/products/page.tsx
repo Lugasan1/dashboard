@@ -11,20 +11,20 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/navigation";
 
 const Products: React.FC = () => {
-  const router = useRouter()
+  const router = useRouter();
   const [showModal, setShowModal] = useState(false);
   const [nome, setNome] = useState("");
   const [descricao, setDescricao] = useState("");
   const [preco, setPreco] = useState("");
   const [quantidade, setQuantidade] = useState("");
   const [imagem, setImagem] = useState<File | null>(null);
-  const [host, setHost] = useState(false)
+  const [host, setHost] = useState(false);
 
   const toggleModal = () => {
     setShowModal(!showModal);
   };
 
-  const handleAddProduct = async() => {
+  const handleAddProduct = async () => {
     if (!imagem) {
       toast.warn("Você deve adicionar uma imagem para o produto");
       return;
@@ -49,31 +49,17 @@ const Products: React.FC = () => {
       return;
     }
 
-    console.log("Nome:", nome);
-    console.log("Descrição:", descricao);
-    console.log("Preço:", preco);
-    console.log("Quantidade:", quantidade);
-    console.log("Imagem:", imagem);
-
-    const response = await addProduct(nome, descricao, preco, quantidade, imagem)
-    if(response.isOk){
-     
-      setHost(true)
-     }
+    const response = await addProduct(nome, descricao, preco, quantidade, imagem);
+    if (response.isOk) {
+      toast.success(`Produto ${nome} criado`);
+      setHost(true);
+    }
     toggleModal();
   };
-  
-  useEffect(() => {  
-    if (host === true) {  
-      let host = process.env.NEXT_PUBLIC_DOMAIN+"/products"
-      router.refresh
-    }  
-  }, [host,router]);
-  
+
 
   return (
     <DefaultLayout>
-      
       <Dialog header="Cadastrar novo produto" visible={showModal} onHide={toggleModal} breakpoints={{ '960px': '75vw', '641px': '100vw' }}>
         <div className="p-5">
           <div className="mb-4">
@@ -103,8 +89,8 @@ const Products: React.FC = () => {
           </div>
         </div>
       </Dialog>
-      <div className=" grid-cols-content gap-4 md:gap-6 2xl:gap-7.5 mt-4 md:mt-6 2xl:mt-7.5">
-      <div>
+      <div className="grid-cols-content gap-4 md:gap-6 2xl:gap-7.5 mt-4 md:mt-6 2xl:mt-7.5">
+        <div>
           <button
             onClick={toggleModal}
             className="flex items-center justify-center gap-2 px-4 py-2 border border-blue text-blue-500 rounded-md hover:text-white hover:bg-blue focus:outline-none"
@@ -114,7 +100,7 @@ const Products: React.FC = () => {
           </button>
         </div>
         <div className="mt-5">
-          <TableTwo />
+          <TableTwo fetchData={host} />
         </div>
       </div>
     </DefaultLayout>

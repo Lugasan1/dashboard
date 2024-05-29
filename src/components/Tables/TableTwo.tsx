@@ -1,11 +1,10 @@
 "use client"
 import Image from "next/image";
-import { Product } from "@/types/product";
 import { useEffect, useState } from "react";
-import { Products } from "./products";
+import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCopy } from "@fortawesome/free-solid-svg-icons";
-import { toast } from "react-toastify";
+import { Products } from "./products";
 
 interface ProductDataReq {
   id: string;
@@ -16,7 +15,7 @@ interface ProductDataReq {
   link: string;
 }
 
-const TableTwo = () => {
+const TableTwo = ({ fetchData }: { fetchData: boolean }) => {
   const [productData, setProductData] = useState<ProductDataReq[]>([]);
 
   const GetProducts = async () => {
@@ -29,7 +28,7 @@ const TableTwo = () => {
 
   useEffect(() => {
     GetProducts();
-  }, []);
+  }, [fetchData]);
 
   const copyToClipboard = (link: string, product: string) => {
     navigator.clipboard.writeText(link);

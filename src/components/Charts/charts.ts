@@ -94,7 +94,7 @@ interface SoldResponse {
   }
 };
 
-export const SoldProducts = async (limit: string): Promise<SoldResponse> => {
+export const SoldProducts = async (limit: string) => {
 try {
   const response = await axios.post(
     `${process.env.NEXT_PUBLIC_API_URL}/soldProducts`,
