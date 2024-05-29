@@ -1,22 +1,31 @@
 import { ApexOptions } from "apexcharts";
-import React, { useEffect, useState } from "react";
-import { Products, Refund } from "./charts";
-import dynamic from "next/dynamic";
-const ReactApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
+import React, { useState } from "react";
+import ReactApexChart from "react-apexcharts";
 
-const initialOptions: ApexOptions = {
+const options: ApexOptions = {
   legend: {
-    show: true,
+    show: false,
     position: "top",
-    horizontalAlign: "center",
+    horizontalAlign: "left",
   },
   colors: ["#3C50E0", "#80CAEE"],
   chart: {
     fontFamily: "Satoshi, sans-serif",
     height: 335,
-    type: "pie",
+    type: "area",
+    dropShadow: {
+      enabled: true,
+      color: "#623CEA14",
+      top: 10,
+      blur: 4,
+      left: 0,
+      opacity: 0.1,
+    },
+
+    toolbar: {
+      show: false,
+    },
   },
-  labels: ["Produtos", "Reembolsos"], // Two categories
   responsive: [
     {
       breakpoint: 1024,
@@ -35,102 +44,105 @@ const initialOptions: ApexOptions = {
       },
     },
   ],
+  stroke: {
+    width: [2, 2],
+    curve: "straight",
+  },
+  // labels: {
+  //   show: false,
+  //   position: "top",
+  // },
+  grid: {
+    xaxis: {
+      lines: {
+        show: true,
+      },
+    },
+    yaxis: {
+      lines: {
+        show: true,
+      },
+    },
+  },
+  dataLabels: {
+    enabled: false,
+  },
+  markers: {
+    size: 4,
+    colors: "#fff",
+    strokeColors: ["#3056D3", "#80CAEE"],
+    strokeWidth: 3,
+    strokeOpacity: 0.9,
+    strokeDashArray: 0,
+    fillOpacity: 1,
+    discrete: [],
+    hover: {
+      size: undefined,
+      sizeOffset: 5,
+    },
+  },
+  xaxis: {
+    type: "category",
+    categories: [
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+    ],
+    axisBorder: {
+      show: false,
+    },
+    axisTicks: {
+      show: false,
+    },
+  },
+  yaxis: {
+    title: {
+      style: {
+        fontSize: "0px",
+      },
+    },
+    min: 0,
+    max: 100,
+  },
 };
 
 interface ChartOneState {
-  series: number[];
-  labels: string[];
-}
-
-interface RefundData {
-  amount: number;
-}
-
-interface RefundResponse {
-  count: number;
-  data: RefundData[];
-  has_more: boolean;
-  object: string;
-  url: string;
-}
-
-interface ProductDataReq {
-  id: number;
-  name: string;
-  image: string;
-  description: string;
-  price: number;
-  link: string;
-  createdAt: string;
-}
-
-interface ApiResponse<T> {
-  isOk: boolean;
-  message: T;
+  series: {
+    name: string;
+    data: number[];
+  }[];
 }
 
 const ChartOne: React.FC = () => {
   const [state, setState] = useState<ChartOneState>({
-    series: [0, 0], // Initialize with two categories
-    labels: ["Produtos", "Reembolsos"],
+    series: [
+      {
+        name: "Product One",
+        data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30, 45],
+      },
+
+      {
+        name: "Product Two",
+        data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39, 51],
+      },
+    ],
   });
 
-  const [options, setOptions] = useState<ApexOptions>(initialOptions);
-  const [totalProducts, setTotalProducts] = useState(0);
-  const [totalRefunds, setTotalRefunds] = useState(0);
-
-  const GetProducts = async () => {
-    const response: ApiResponse<ProductDataReq[]> = await Products();
-    if (response.isOk) {
-      const productData = response.message;
-      console.log("product", productData);
-      
-      const prices = productData.map((product) => Number(product.price));
-      let totalProductAmount = prices.reduce((acc, price) => acc + price, 0);
-      totalProductAmount = totalProductAmount / 100; 
-      let convertedAmount = totalProductAmount.toLocaleString("en-US", { minimumFractionDigits: 2 })
-
-      setTotalProducts(prices.length);
-      //console.log("totalProductAmount", totalProductAmount.toLocaleString("en-US", { minimumFractionDigits: 2 }));
-
-      setState((prevState) => ({
-        ...prevState,
-        series: [totalProductAmount, prevState.series[1]], 
-      }));
-    }
-  };
-
-  const GetRefund = async () => {
-    const response = await Refund("100");
-    if (response.isOk) {
-      const refundData = response.message;
-      if (refundData.refunds.count !== 0) {
-        const refundAmounts = refundData.refunds.data.map((refund: { amount: number; }) => refund.amount);
-        let totalRefundAmount = refundAmounts.reduce((acc: any, amount: any) => acc + amount, 0);
-        totalRefundAmount = totalRefundAmount / 100; 
-        
-        setTotalRefunds(refundAmounts.length);
-        console.log("totalRefundAmount", totalRefundAmount.toLocaleString("en-US", { minimumFractionDigits: 2 }));
-
-        setState((prevState) => ({
-          ...prevState,
-          series: [prevState.series[0], totalRefundAmount], 
-        }));
-      }
-    }
-  };
-
-  useEffect(() => {
-    GetRefund();
-    GetProducts();
-  }, []);
-
-  useEffect(() => {
-    setOptions((prevOptions) => ({
-      ...prevOptions,
-      labels: state.labels,
+  const handleReset = () => {
+    setState((prevState) => ({
+      ...prevState,
     }));
-  }, [state.labels]);
+  };
+  handleReset;
 
   return (
     <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-8">
@@ -141,17 +153,8 @@ const ChartOne: React.FC = () => {
               <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-primary"></span>
             </span>
             <div className="w-full">
-              <p className="font-semibold text-primary">Total Produtos</p>
-              <p className="text-sm font-medium">{totalProducts}</p>
-            </div>
-          </div>
-          <div className="flex min-w-47.5">
-            <span className="mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-secondary">
-              <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-secondary"></span>
-            </span>
-            <div className="w-full">
-              <p className="font-semibold text-secondary">Total Reembolsos</p>
-              <p className="text-sm font-medium">{totalRefunds}</p>
+              <p className="font-semibold text-primary">Pedidos</p>
+              <p className="text-sm font-medium">12.04.2022 - 12.05.2022</p>
             </div>
           </div>
         </div>
@@ -162,7 +165,7 @@ const ChartOne: React.FC = () => {
           <ReactApexChart
             options={options}
             series={state.series}
-            type="pie"
+            type="area"
             height={350}
             width={"100%"}
           />
