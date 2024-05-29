@@ -1,5 +1,11 @@
-import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { useRouter, usePathname  } from 'next/navigation';
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  ReactNode,
+} from "react";
+import { useRouter, usePathname } from "next/navigation";
 
 type AuthContextType = {
   isAuthenticated: boolean;
@@ -12,27 +18,35 @@ type AuthProviderProps = {
   children: ReactNode;
 };
 
-export const AuthProvider: React.FC<AuthProviderProps> = ({ children }: AuthProviderProps) => {
+export const AuthProvider: React.FC<AuthProviderProps> = ({
+  children,
+}: AuthProviderProps) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const router = useRouter();
   const pathname = usePathname();
 
   useEffect(() => {
-    const token = localStorage.getItem('@NativePay:token');
+    const token = localStorage.getItem("@NativePay:token");
     setIsAuthenticated(!!token);
   }, []);
 
   const logout = () => {
-    localStorage.removeItem('@NativePay:token');
+    localStorage.removeItem("@NativePay:token");
     setIsAuthenticated(false);
     //router.push('/');
   };
 
   useEffect(() => {
-    const publicPaths = ['/forms/form-elements','/forms/completion', '/', '/signup'];
+    const publicPaths = [
+      "/forms/form-elements",
+      "/forms/completion",
+      "/",
+      "/signup",
+      "/signin",
+    ];
 
     if (!isAuthenticated && !publicPaths.includes(pathname)) {
-      router.push('/');
+      router.push("/");
     }
   }, [isAuthenticated, pathname, router]);
 
@@ -46,7 +60,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }: AuthProv
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth deve ser usado dentro de um AuthProvider');
+    throw new Error("useAuth deve ser usado dentro de um AuthProvider");
   }
   return context;
 };
