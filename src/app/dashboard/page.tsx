@@ -1,24 +1,18 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import ChartOne from "../../components/Charts/ChartOne";
 import ChartThree from "../../components/Charts/ChartThree";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import ChartTwo from "@/components/Charts/ChartTwo";
 import { Card } from "primereact/card";
 import { SoldProducts } from "./dashboard";
 
-interface SoldProducts {
+interface SoldProduct {
   amount: string;
 }
 
 const Dashboard: React.FC = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
   const [totalProductSold, setTotalProductSold] = useState(0);
   const [totalProductSoldPrice, setTotalProductSoldPrice] = useState("");
-
-  const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
-  };
 
   const GetSoldProducts = async () => {
     try {
@@ -27,7 +21,7 @@ const Dashboard: React.FC = () => {
         const soldProducts = response.message.soldProducts;
 
         let arrayPrice: number[] = [];
-        soldProducts.data.forEach((element: SoldProducts) => {
+        soldProducts.data.forEach((element: SoldProduct) => {
           arrayPrice.push(Number(element.amount));
         });
 
@@ -65,39 +59,29 @@ const Dashboard: React.FC = () => {
 
   return (
     <DefaultLayout>
-      <div className=" grid-cols-content mt-4 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
-        <div className="flex justify-evenly">
-          <div className="mr-2">
+      <div className="grid-cols-content mt-4 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
+        <div className="flex flex-wrap justify-center md:justify-evenly">
+          <div className="mb-4 mr-2 md:mb-0">
             <Card title="Total em vendas">
               <p className="m-0">${totalProductSoldPrice}</p>
             </Card>
           </div>
-          <div>
+          <div className="mb-4 md:mb-0">
             <Card title="Pedidos Pagos">
               <p className="m-0">{totalProductSold}</p>
             </Card>
           </div>
-          {/* <div>
-            <Card title="Simple Card">
-              <p className="m-0">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Inventore sed consequuntur error repudiandae numquam deserunt
-                quisquam repellat libero asperiores earum nam nobis, culpa
-                ratione quam perferendis esse, cupiditate neque quas!
-              </p>
-            </Card>
-  </div>*/}
         </div>
-        <div className="mt-5">
-          <ChartOne />
-        </div>
-
-        <div className="mt-5">
-          <ChartTwo />
-        </div>
-
-        <div className="mt-5">
-          <ChartThree />
+        <div className="flex flex-col md:flex-row md:justify-evenly">
+          <div className="mt-5 md:mr-5">
+            <ChartTwo />
+          </div>
+          <div className="mt-5 md:ml-5 md:hidden">
+            <ChartThree />
+          </div>
+          <div className="mt-5 hidden md:block">
+            <ChartThree />
+          </div>
         </div>
       </div>
     </DefaultLayout>

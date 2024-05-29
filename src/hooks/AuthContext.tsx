@@ -41,11 +41,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
       "/forms/form-elements",
       "/forms/completion",
       "/",
-      "/signup",
-      "/signin",
+      "/auth/signup",
+      "/auth/signin",
     ];
 
     if (!isAuthenticated && !publicPaths.includes(pathname)) {
+      console.log(publicPaths.includes(pathname), isAuthenticated);
       router.push("/");
     }
   }, [isAuthenticated, pathname, router]);

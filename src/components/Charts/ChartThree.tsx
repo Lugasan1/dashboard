@@ -3,7 +3,9 @@ import React, { useEffect, useState } from "react";
 import { SoldProducts } from "./charts";
 import dynamic from "next/dynamic";
 
-const ReactApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
+const ReactApexChart = dynamic(() => import("react-apexcharts"), {
+  ssr: false,
+});
 
 interface ChartThreeState {
   series: {
@@ -17,14 +19,14 @@ const initialOptions: ApexOptions = {
     fontFamily: "Satoshi, sans-serif",
     type: "line",
     zoom: {
-      enabled: false
-    }
+      enabled: false,
+    },
   },
   dataLabels: {
-    enabled: false
+    enabled: false,
   },
   stroke: {
-    curve: 'straight'
+    curve: "straight",
   },
   colors: ["#3C50E0"],
   legend: {
@@ -32,17 +34,17 @@ const initialOptions: ApexOptions = {
     position: "bottom",
   },
   title: {
-    text: '',
-    align: 'left'
+    text: "",
+    align: "left",
   },
   grid: {
     row: {
-      colors: ['#f3f3f3', 'transparent'], 
-      opacity: 0.5
+      colors: ["#f3f3f3", "transparent"],
+      opacity: 0.5,
     },
   },
   xaxis: {
-    categories: ['Total'],
+    categories: ["Total"],
   },
   responsive: [
     {
@@ -54,10 +56,10 @@ const initialOptions: ApexOptions = {
       },
     },
     {
-      breakpoint: 640,
       options: {
         chart: {
           width: 200,
+          height: 200,
         },
       },
     },
@@ -68,7 +70,7 @@ const ChartThree: React.FC = () => {
   const [state, setState] = useState<ChartThreeState>({
     series: [
       {
-        name: 'Produtos Vendidos',
+        name: "Produtos Vendidos",
         data: [],
       },
     ],
@@ -81,13 +83,20 @@ const ChartThree: React.FC = () => {
         const soldProducts = response.message.soldProducts;
 
         if (soldProducts && Array.isArray(soldProducts.data)) {
-          const soldData = [soldProducts.data.length]; 
+          let soldData = soldProducts.data.length;
           console.log("soldData:", soldData);
+
+          let ordenedArray = [];
+
+          while (soldData >= 0) {
+            ordenedArray.push(soldData);
+            soldData -= 5; // Decrementa o número por 5 em cada iteração
+          }
           setState({
             series: [
               {
-                name: 'Produtos Vendidos',
-                data: [10, 41, 35, 51, 49, 62, 69, 91, 148],
+                name: "Produtos Vendidos",
+                data: ordenedArray.reverse(),
               },
             ],
           });

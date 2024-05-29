@@ -1,12 +1,10 @@
-"use client"
+"use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import { PostLogin } from "./auth";
-import { useRouter } from 'next/navigation'
-import { toast } from 'react-toastify';
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 interface LoginResponse {
   token: string;
@@ -16,25 +14,24 @@ interface LoginResponse {
 
 const SignIn: React.FC = () => {
   const router = useRouter();
-  const [email, setEmail] = useState<string>("")
-  const [password, setPassword] = useState<string>("")
-  const [logged, setLogged] = useState(false)
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [logged, setLogged] = useState(false);
 
   const isLoginResponse = (message: any): message is LoginResponse => {
     return (message as LoginResponse).token !== undefined;
   };
 
   const SignIn = async (email: string, password: string) => {
-
     if (email === "") {
       return toast.warn("campo Email não pode estar vazio", {
-        position: "top-right"
+        position: "top-right",
       });
     }
 
     if (password === "") {
       return toast.warn("campo Senha não pode estar vazio", {
-        position: "top-right"
+        position: "top-right",
       });
     }
 
@@ -42,20 +39,25 @@ const SignIn: React.FC = () => {
 
     if (response.isOk && isLoginResponse(response.message)) {
       localStorage.setItem("@NativePay:token", response.message.token);
-      setLogged(true)
+      setLogged(true);
     } else {
-      toast.error("Falha no login: " + (typeof response.message === 'string' ? response.message : response.message.error), {
-        position: "top-right"
-      });
+      toast.error(
+        "Falha no login: " +
+          (typeof response.message === "string"
+            ? response.message
+            : response.message.error),
+        {
+          position: "top-right",
+        },
+      );
     }
   };
 
-  useEffect(() => {  
-    if (logged === true) {  
-    router.push("/dashboard");  
-    }  
-  }, [logged,router]);
-
+  useEffect(() => {
+    if (logged === true && localStorage.getItem("@NativePay:token")) {
+      router.push("/dashboard");
+    }
+  }, [logged, router]);
 
   return (
     <div className="p-5">
@@ -209,7 +211,9 @@ const SignIn: React.FC = () => {
 
           <div className="w-full border-stroke dark:border-strokedark xl:w-1/2 xl:border-l-2">
             <div className="w-full p-4 sm:p-12.5 xl:p-17.5">
-              <span className="mb-1.5 block font-medium">Acessar Dashboard</span>
+              <span className="mb-1.5 block font-medium">
+                Acessar Dashboard
+              </span>
               <h2 className="mb-9 text-2xl font-bold text-white dark:text-white sm:text-title-xl2">
                 Entrar
               </h2>
