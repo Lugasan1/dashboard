@@ -104,18 +104,12 @@ const FormLayout = () => {
               </div>
               <div className="ml-5 mt-5 flex w-full flex-row items-center gap-3">
                 <label htmlFor="" className="text-md font-bold text-slate-800">
-                  {productName ? productName.toString() : ""}
-                </label>
-                <label htmlFor="" className="text-md font-bold text-slate-800">
                   X{" "}
                   {price
                     ? `R$ ${(parseFloat(price) / 100).toLocaleString("pt-BR", {
                         minimumFractionDigits: 2,
                       })}`
                     : ""}
-                </label>
-                <label htmlFor="" className="text-md font-bold text-slate-800">
-                  Quantity: {quantity}
                 </label>
               </div>
             </div>
@@ -129,6 +123,14 @@ const FormLayout = () => {
                 {`R$ ${(total / 100).toLocaleString("pt-BR", {
                   minimumFractionDigits: 2,
                 })}`}
+              </label>
+            </div>
+            <div className="mb-6 flex flex-row justify-between">
+            <label className="font-medium text-black dark:text-white">
+            Quantity
+              </label>
+              <label className="font-bold text-black dark:text-white">
+              {quantity}
               </label>
             </div>
           </div>

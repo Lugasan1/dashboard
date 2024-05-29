@@ -1,22 +1,33 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import ChartOne from "../Charts/ChartOne";
-import ChartThree from "../Charts/ChartThree";
 import ChartTwo from "../Charts/ChartTwo";
-import ChatCard from "../Chat/ChatCard";
-import TableOne from "../Tables/TableOne";
 import CardDataStats from "../CardDataStats";
-import MapOne from "../Maps/MapOne";
-import { SoldProducts } from "@/app/dashboard/dashboard";
 import CardDataStats2 from "../CardDataStats2";
+import { SoldProducts } from "@/app/dashboard/dashboard";
 
 interface SoldProduct {
   amount: string;
 }
 
+interface ChartOneState {
+  series: {
+    name: string;
+    data: number[];
+  }[];
+}
+
 const ECommerce: React.FC = () => {
   const [totalProductSold, setTotalProductSold] = useState(0);
   const [totalProductSoldPrice, setTotalProductSoldPrice] = useState("");
+  const [chartState, setChartState] = useState<ChartOneState>({
+    series: [
+      {
+        name: "Produtos Vendidos",
+        data: [],
+      },
+    ],
+  });
 
   const GetSoldProducts = async () => {
     try {
@@ -31,21 +42,36 @@ const ECommerce: React.FC = () => {
 
         let totalSum: number = arrayPrice.reduce(
           (acc, currentValue) => acc + currentValue,
-          0,
+          0
         );
 
         let formattedTotalSum: string = (totalSum / 100).toLocaleString(
           "en-US",
           {
             minimumFractionDigits: 2,
-          },
+          }
         );
 
         setTotalProductSoldPrice(formattedTotalSum);
 
         if (soldProducts && Array.isArray(soldProducts.data)) {
-          const soldData = soldProducts.data.length;
-          setTotalProductSold(soldData);
+          let soldData = soldProducts.data.length;
+          let ordenedArray: number[] = [];
+
+          while (soldData >= 0) {
+            ordenedArray.push(soldData);
+            soldData -= 5; // Decrementa o número por 5 em cada iteração
+          }
+
+          setChartState({
+            series: [
+              {
+                name: "Produtos Vendidos",
+                data: ordenedArray.reverse(),
+              },
+            ],
+          });
+          setTotalProductSold(soldProducts.data.length); // Use the correct length
         } else {
           console.error("Invalid sold products data format:", soldProducts);
         }
@@ -60,6 +86,7 @@ const ECommerce: React.FC = () => {
   useEffect(() => {
     GetSoldProducts();
   }, []);
+
   return (
     <>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-2 2xl:gap-7.5">
@@ -82,7 +109,7 @@ const ECommerce: React.FC = () => {
             />
           </svg>
         </CardDataStats>
-       
+
         <CardDataStats2 title="Total Product" total={totalProductSold} rate="">
           <svg
             className="fill-primary dark:fill-white"
@@ -91,15 +118,12 @@ const ECommerce: React.FC = () => {
             viewBox="0 0 22 22"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-          >
-            
-          </svg>
+          ></svg>
         </CardDataStats2>
-       
       </div>
 
       <div className="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
-        <ChartOne />
+        <ChartOne state={chartState} />
         <ChartTwo />
       </div>
     </>

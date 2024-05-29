@@ -10,6 +10,7 @@ interface LoginResponse {
   token: string;
   auth: boolean;
   error: string;
+  name: string;
 }
 
 const SignIn: React.FC = () => {
@@ -39,6 +40,7 @@ const SignIn: React.FC = () => {
 
     if (response.isOk && isLoginResponse(response.message)) {
       localStorage.setItem("@NativePay:token", response.message.token);
+      localStorage.setItem("@NativePay:name", response.message.name)
       setLogged(true);
     } else {
       toast.error(

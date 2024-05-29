@@ -1,5 +1,5 @@
 import { ApexOptions } from "apexcharts";
-import React, { useState } from "react";
+import React from "react";
 import ReactApexChart from "react-apexcharts";
 
 const options: ApexOptions = {
@@ -21,7 +21,6 @@ const options: ApexOptions = {
       left: 0,
       opacity: 0.1,
     },
-
     toolbar: {
       show: false,
     },
@@ -48,10 +47,6 @@ const options: ApexOptions = {
     width: [2, 2],
     curve: "straight",
   },
-  // labels: {
-  //   show: false,
-  //   position: "top",
-  // },
   grid: {
     xaxis: {
       lines: {
@@ -122,28 +117,11 @@ interface ChartOneState {
   }[];
 }
 
-const ChartOne: React.FC = () => {
-  const [state, setState] = useState<ChartOneState>({
-    series: [
-      {
-        name: "Product One",
-        data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30, 45],
-      },
+interface ChartOneProps {
+  state: ChartOneState;
+}
 
-      {
-        name: "Product Two",
-        data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39, 51],
-      },
-    ],
-  });
-
-  const handleReset = () => {
-    setState((prevState) => ({
-      ...prevState,
-    }));
-  };
-  handleReset;
-
+const ChartOne: React.FC<ChartOneProps> = ({ state }) => {
   return (
     <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-8">
       <div className="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap">
@@ -154,7 +132,7 @@ const ChartOne: React.FC = () => {
             </span>
             <div className="w-full">
               <p className="font-semibold text-primary">Pedidos</p>
-              <p className="text-sm font-medium">12.04.2022 - 12.05.2022</p>
+              <p className="text-sm font-medium"></p>
             </div>
           </div>
         </div>
