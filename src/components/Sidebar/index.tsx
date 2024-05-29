@@ -1,12 +1,11 @@
 "use client";
-
 import React, { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import Image from "next/image";
 import SidebarLinkGroup from "./SidebarLinkGroup";
 import { faHome, faAdd } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { AccountBank } from "./sidebar";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -15,7 +14,7 @@ interface SidebarProps {
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   const pathname = usePathname();
-
+  const [accountAmount, setAccountAmount] = useState("");
   const trigger = useRef<any>(null);
   const sidebar = useRef<any>(null);
 
@@ -60,6 +59,22 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
     }
   }, [sidebarExpanded]);
 
+  const GetAmount = async () => {
+    const response = await AccountBank();
+    if (response.isOk) {
+      let formattedTotalSum: string = (
+        response.message.account.available[0].amount / 100
+      ).toLocaleString("en-US", {
+        minimumFractionDigits: 2,
+      });
+      setAccountAmount(formattedTotalSum);
+    }
+  };
+
+  useEffect(() => {
+    GetAmount();
+  }, []);
+
   return (
     <aside
       ref={sidebar}
@@ -98,14 +113,14 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
         <nav className="mt-5 px-4 py-4 lg:mt-9 lg:px-6">
           {/* <!-- Menu Group --> */}
           <div>
-           <div>
-              <h3 className=" ml-4 text-md font-bold text-bodydark2">
+            <div>
+              <h3 className=" text-md ml-4 font-bold text-bodydark2">
                 Saldo Disponível
               </h3>
               <span className="mb-4 ml-4 text-xl font-medium text-lime-600">
-                R$ 4.000,00
+                $ {accountAmount}
               </span>
-    </div>
+            </div>
             <h3 className="mb-4 ml-4 mt-8 text-sm font-semibold text-bodydark2">
               MENU
             </h3>

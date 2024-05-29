@@ -1,14 +1,22 @@
 import axios from "axios";
 
-interface ProductsResponse {
+interface AccountProductsResponse {
   isOk: boolean;
-  message: [];
+  message: {
+    available: {
+      amount: number;
+      currency: string;
+      source_types: {
+        card: number;
+      };
+    };
+  };
 }
 
-export const Products = async (): Promise<ProductsResponse> => {
+export const AccountBank = async () => {
   try {
     const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_URL}/products`,
+      `${process.env.NEXT_PUBLIC_API_URL}/account`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -26,6 +34,6 @@ export const Products = async (): Promise<ProductsResponse> => {
     if (axios.isAxiosError(error)) {
       return { isOk: false, message: error.response?.data || error.message };
     }
-    return { isOk: false, message: [] };
+    return { isOk: false, message: "An unexpected error occurred" };
   }
 };

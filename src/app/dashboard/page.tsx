@@ -36,7 +36,6 @@ const Dashboard: React.FC = () => {
           0,
         );
 
-        // Divide por 100 e formata como string para exibição
         let formattedTotalSum: string = (totalSum / 100).toLocaleString(
           "en-US",
           {
@@ -44,15 +43,11 @@ const Dashboard: React.FC = () => {
           },
         );
 
-        console.log("Total Sum:", formattedTotalSum);
-
-        // Use formattedTotalSum para exibição ou armazenamento como string
         setTotalProductSoldPrice(formattedTotalSum);
 
         if (soldProducts && Array.isArray(soldProducts.data)) {
           const soldData = soldProducts.data.length;
           setTotalProductSold(soldData);
-          console.log("soldData:", soldData);
         } else {
           console.error("Invalid sold products data format:", soldProducts);
         }

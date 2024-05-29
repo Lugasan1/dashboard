@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -9,9 +9,10 @@ import { Products } from "./products";
 interface ProductDataReq {
   id: string;
   name: string;
+  quantity: string;
   image: string;
   description: string;
-  price: number; 
+  price: number;
   link: string;
 }
 
@@ -97,11 +98,11 @@ const TableTwo = ({ fetchData }: { fetchData: boolean }) => {
               <button
                 onClick={() =>
                   copyToClipboard(
-                    `${process.env.NEXT_PUBLIC_DOMAIN}forms/form-elements?client=${product.link}&productName=${product.name}&price=${product.price}&image=${product.image}`,
-                    product.name
+                    `${process.env.NEXT_PUBLIC_DOMAIN}forms/form-elements?client=${product.link}&productQuantity=${product.quantity}&productName=${product.name}&price=${product.price}&image=${product.image}`,
+                    product.name,
                   )
                 }
-                className="ml-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
+                className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 ml-2"
               >
                 <FontAwesomeIcon icon={faCopy} />
               </button>
