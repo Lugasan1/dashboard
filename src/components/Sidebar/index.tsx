@@ -129,7 +129,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               {/* <!-- Menu Item Dashboard --> */}
               <SidebarLinkGroup
                 activeCondition={
-                  pathname === "/" || pathname.includes("dashboard")
+                  pathname === "/" ||
+                  pathname.includes("dashboard") ||
+                  pathname.includes("products")
                 }
               >
                 {(handleClick, open) => {
@@ -237,6 +239,19 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 className="text-bodydark2 duration-300 ease-in-out group-hover:text-white"
                               />
                               Cliente/transações
+                            </Link>
+                          </li>
+
+                          <li>
+                            <Link
+                              href="/shopify-store"
+                              className={`border-gray-300 hover:bg-gray-700 group relative flex items-center gap-2.5 rounded-md border px-4 py-2 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${pathname === "/shopify-store" ? "bg-white text-black" : ""}`}
+                            >
+                              <FontAwesomeIcon
+                                icon={faAdd}
+                                className="text-bodydark2 duration-300 ease-in-out group-hover:text-white"
+                              />
+                              Lojas (Shopify)
                             </Link>
                           </li>
                         </ul>

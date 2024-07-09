@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 import { addProduct } from "./create-product";
 import Table from "./table";
 
-const Products: React.FC = () => {
+const ShopifyStore: React.FC = () => {
   const router = useRouter();
   const [showModal, setShowModal] = useState(false);
   const [nome, setNome] = useState("");
@@ -170,7 +170,7 @@ const Products: React.FC = () => {
             className="border-blue hover:bg-blue flex items-center justify-center gap-2 rounded-md border px-4 py-2 text-blue-500 hover:text-white focus:outline-none"
           >
             <FontAwesomeIcon icon={faPlus} />
-            Cadastrar produto
+            Cadastrar loja
           </button>
         </div>
         <div className="mt-5">
@@ -181,4 +181,4 @@ const Products: React.FC = () => {
   );
 };
 
-export default Products;
+export default ShopifyStore;

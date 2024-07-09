@@ -73,7 +73,10 @@ const Table = ({ fetchData }: { fetchData: boolean }) => {
           <div className="col-span-1 flex items-center">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
               <p className="text-sm text-black dark:text-white">
-                {charge.amount}
+                {new Intl.NumberFormat("pt-BR", {
+                  style: "currency",
+                  currency: charge.currency.toUpperCase(),
+                }).format(charge.amount / 100)}
               </p>
             </div>
           </div>
