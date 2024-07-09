@@ -1,10 +1,10 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import Link from "next/link";
 import Image from "next/image";
-import { PostLogin } from "./auth";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { PostLogin } from "./auth";
 
 interface LoginResponse {
   token: string;
@@ -40,7 +40,7 @@ const SignIn: React.FC = () => {
 
     if (response.isOk && isLoginResponse(response.message)) {
       localStorage.setItem("@NativePay:token", response.message.token);
-      localStorage.setItem("@NativePay:name", response.message.name)
+      localStorage.setItem("@NativePay:name", response.message.name);
       setLogged(true);
     } else {
       toast.error(

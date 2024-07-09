@@ -1,22 +1,23 @@
 import axios from "axios";
 
 interface LoginResponse {
-    error: string;
-    token: string;
-    auth: boolean;
-  }
+  error: string;
+  token: string;
+  auth: boolean;
+}
 
 interface PostLoginResponse {
   isOk: boolean;
   message: LoginResponse | string;
 }
 
-
-
-  export const PostLogin = async (email: string, password: string): Promise<PostLoginResponse> => {
+export const PostLogin = async (
+  email: string,
+  password: string,
+): Promise<PostLoginResponse> => {
   try {
     const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_API_URL}/login`,
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/sign-in`,
       {
         email: email,
         password: password,
@@ -25,7 +26,7 @@ interface PostLoginResponse {
         headers: {
           "Content-Type": "application/json",
         },
-      }
+      },
     );
 
     if (response.status >= 200 && response.status < 400) {

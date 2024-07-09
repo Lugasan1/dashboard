@@ -1,11 +1,11 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
-import { usePathname } from "next/navigation";
-import Link from "next/link";
-import SidebarLinkGroup from "./SidebarLinkGroup";
-import { faHome, faAdd } from "@fortawesome/free-solid-svg-icons";
+import { faAdd, faHome } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import React, { useEffect, useRef, useState } from "react";
 import { AccountBank } from "./sidebar";
+import SidebarLinkGroup from "./SidebarLinkGroup";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -225,6 +225,18 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 className="text-bodydark2 duration-300 ease-in-out group-hover:text-white"
                               />
                               Produtos
+                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              href="/client-transaction"
+                              className={`border-gray-300 hover:bg-gray-700 group relative flex items-center gap-2.5 rounded-md border px-4 py-2 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${pathname === "/client-transaction" ? "bg-white text-black" : ""}`}
+                            >
+                              <FontAwesomeIcon
+                                icon={faAdd}
+                                className="text-bodydark2 duration-300 ease-in-out group-hover:text-white"
+                              />
+                              Cliente/transações
                             </Link>
                           </li>
                         </ul>

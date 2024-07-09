@@ -1,16 +1,16 @@
 "use client";
+import { faCopy } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCopy } from "@fortawesome/free-solid-svg-icons";
 import { Products } from "./products";
 
 interface ProductDataReq {
   id: string;
   name: string;
   quantity: string;
-  image: string;
+  photo: string;
   description: string;
   price: number;
   link: string;
@@ -59,7 +59,7 @@ const TableTwo = ({ fetchData }: { fetchData: boolean }) => {
         </div>
       </div>
 
-      {productData.map((product, key) => (
+      {productData?.map((product, key) => (
         <div
           className="grid grid-cols-6 border-t border-stroke px-4 py-4.5 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5"
           key={key}
@@ -68,7 +68,7 @@ const TableTwo = ({ fetchData }: { fetchData: boolean }) => {
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
               <div className="h-12.5 w-15 rounded-md">
                 <Image
-                  src={product.image}
+                  src={product.photo}
                   width={60}
                   height={50}
                   alt="Product"
@@ -87,18 +87,18 @@ const TableTwo = ({ fetchData }: { fetchData: boolean }) => {
           <div className="col-span-1 flex items-center">
             <p className="text-sm text-black dark:text-white">
               ${" "}
-              {(product.price / 100).toLocaleString("en-US", {
+              {product.price.toLocaleString("en-US", {
                 minimumFractionDigits: 2,
               })}
             </p>
           </div>
           <div className="col-span-1 flex items-center">
             <p className="text-sm text-black dark:text-white">
-              {product.link.substring(0, 10)}
+              {product?.link?.substring(0, 10)}
               <button
                 onClick={() =>
                   copyToClipboard(
-                    `${process.env.NEXT_PUBLIC_DOMAIN}forms/form-elements?client=${product.link}&productQuantity=${product.quantity}&productName=${product.name}&price=${product.price}&image=${product.image}`,
+                    `${process.env.NEXT_PUBLIC_DOMAIN}forms/form-elements?client=${product?.link || ""}&productQuantity=${product.quantity}&productName=${product.name}&price=${product.price}&image=${product.image}`,
                     product.name,
                   )
                 }
