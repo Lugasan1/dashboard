@@ -1,7 +1,6 @@
 import { ApexOptions } from "apexcharts";
-import React, { useEffect, useState } from "react";
-import { SoldProducts } from "./charts";
 import dynamic from "next/dynamic";
+import React, { useEffect, useState } from "react";
 
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
@@ -77,38 +76,35 @@ const ChartThree: React.FC = () => {
   });
 
   const GetSoldProducts = async () => {
-    try {
-      const response = await SoldProducts("100");
-      if (response.isOk) {
-        const soldProducts = response.message.soldProducts;
-
-        if (soldProducts && Array.isArray(soldProducts.data)) {
-          let soldData = soldProducts.data.length;
-          console.log("soldData:", soldData);
-
-          let ordenedArray = [];
-
-          while (soldData >= 0) {
-            ordenedArray.push(soldData);
-            soldData -= 5; // Decrementa o número por 5 em cada iteração
-          }
-          setState({
-            series: [
-              {
-                name: "Produtos Vendidos",
-                data: ordenedArray.reverse(),
-              },
-            ],
-          });
-        } else {
-          console.error("Invalid sold products data format:", soldProducts);
-        }
-      } else {
-        console.error("Failed to fetch sold products data.");
-      }
-    } catch (error) {
-      console.error("Error fetching sold products data:", error);
-    }
+    // try {
+    //   const response = await SoldProducts("100");
+    //   if (response.isOk) {
+    //     const soldProducts = response.message.soldProducts;
+    //     if (soldProducts && Array.isArray(soldProducts.data)) {
+    //       let soldData = soldProducts.data.length;
+    //       console.log("soldData:", soldData);
+    //       let ordenedArray = [];
+    //       while (soldData >= 0) {
+    //         ordenedArray.push(soldData);
+    //         soldData -= 5; // Decrementa o número por 5 em cada iteração
+    //       }
+    //       setState({
+    //         series: [
+    //           {
+    //             name: "Produtos Vendidos",
+    //             data: ordenedArray.reverse(),
+    //           },
+    //         ],
+    //       });
+    //     } else {
+    //       console.error("Invalid sold products data format:", soldProducts);
+    //     }
+    //   } else {
+    //     console.error("Failed to fetch sold products data.");
+    //   }
+    // } catch (error) {
+    //   console.error("Error fetching sold products data:", error);
+    // }
   };
 
   useEffect(() => {

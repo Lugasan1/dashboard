@@ -10,7 +10,7 @@ export const addProduct = async (
   description: string,
   price: string,
   quantity: string,
-  image: File
+  image: File,
 ): Promise<ProductResponse> => {
   try {
     const formData = new FormData();
@@ -29,7 +29,7 @@ export const addProduct = async (
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${localStorage.getItem("@NativePay:Token")}`,
         },
-      }
+      },
     );
 
     if (response.status >= 200 && response.status < 400) {

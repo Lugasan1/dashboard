@@ -20,7 +20,7 @@ export const AccountBank = async () => {
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("@NativePay:token")}`,
+          Authorization: `Bearer ${localStorage.getItem("@NativePay:Token")}`,
         },
       },
     );

@@ -1,11 +1,11 @@
+import { usePathname, useRouter } from "next/navigation";
 import React, {
   createContext,
+  ReactNode,
   useContext,
   useEffect,
   useState,
-  ReactNode,
 } from "react";
-import { useRouter, usePathname } from "next/navigation";
 
 type AuthContextType = {
   isAuthenticated: boolean;
@@ -25,15 +25,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
   const router = useRouter();
   const pathname = usePathname();
 
+  console.log("isAuthenticated:", isAuthenticated);
+
   useEffect(() => {
-    const token = localStorage.getItem("@NativePay:token");
+    const token = localStorage.getItem("@NativePay:Token");
     setIsAuthenticated(!!token);
   }, []);
 
   const logout = () => {
-    localStorage.removeItem("@NativePay:token");
+    localStorage.removeItem("@NativePay:Token");
     setIsAuthenticated(false);
-    //router.push('/');
   };
 
   useEffect(() => {
@@ -43,10 +44,23 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
       "/",
       "/auth/signup",
       "/auth/signin",
+      "/products",
+      "/shopify-store",
+      "/client-transaction",
+      "/charges",
+      "/dashboard",
     ];
+
+    console.log({
+      isAuthenticated,
+      publicPaths,
+      pathname,
+    });
 
     if (!isAuthenticated && !publicPaths.includes(pathname)) {
       console.log(publicPaths.includes(pathname), isAuthenticated);
+      localStorage.clear();
+      sessionStorage.clear();
       router.push("/");
     }
   }, [isAuthenticated, pathname, router]);

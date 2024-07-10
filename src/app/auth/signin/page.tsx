@@ -39,7 +39,7 @@ const SignIn: React.FC = () => {
     const response = await PostLogin(email, password);
 
     if (response.isOk && isLoginResponse(response.message)) {
-      localStorage.setItem("@NativePay:token", response.message.token);
+      localStorage.setItem("@NativePay:Token", response.message.token);
       localStorage.setItem("@NativePay:name", response.message.name);
       setLogged(true);
     } else {
@@ -56,7 +56,7 @@ const SignIn: React.FC = () => {
   };
 
   useEffect(() => {
-    if (logged === true && localStorage.getItem("@NativePay:token")) {
+    if (logged === true && localStorage.getItem("@NativePay:Token")) {
       router.push("/dashboard");
     }
   }, [logged, router]);

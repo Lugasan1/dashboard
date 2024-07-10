@@ -1,8 +1,9 @@
 import { ApexOptions } from "apexcharts";
-import React, { useEffect, useState } from "react";
-import { Refund, SoldProducts } from "./charts";
 import dynamic from "next/dynamic";
-const ReactApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
+import React, { useEffect, useState } from "react";
+const ReactApexChart = dynamic(() => import("react-apexcharts"), {
+  ssr: false,
+});
 interface ChartTwoState {
   series: number[];
 }
@@ -54,21 +55,21 @@ const ChartTwo: React.FC = () => {
   });
 
   const GetSoldProducts = async () => {
-    try {
-      const response = await Refund("100");
-      if (response.isOk) {
-        const refundData = response.message;
-        console.log(refundData.refunds.data.length)
-        //const { desktop, tablet, mobile, unknown } = response.message;
-        setState({
-          series: [refundData.refunds.data.length],
-        });
-      } else {
-        console.error("Failed to fetch sold products data.");
-      }
-    } catch (error) {
-      console.error("Error fetching sold products data:", error);
-    }
+    // try {
+    //   const response = await Refund("100");
+    //   if (response.isOk) {
+    //     const refundData = response.message;
+    //     console.log(refundData.refunds.data.length)
+    //     //const { desktop, tablet, mobile, unknown } = response.message;
+    //     setState({
+    //       series: [refundData.refunds.data.length],
+    //     });
+    //   } else {
+    //     console.error("Failed to fetch sold products data.");
+    //   }
+    // } catch (error) {
+    //   console.error("Error fetching sold products data:", error);
+    // }
   };
 
   useEffect(() => {
@@ -86,7 +87,6 @@ const ChartTwo: React.FC = () => {
           </div>
           <div>
             <div className="relative z-20 inline-block">
-              
               <span className="absolute right-3 top-1/2 z-10 -translate-y-1/2">
                 <svg
                   width="10"

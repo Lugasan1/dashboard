@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { Dialog } from "primereact/dialog";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
-import { addProduct } from "./create-product";
+import { CreateStore } from "./create-store";
 import Table from "./table";
 
 const ShopifyStore: React.FC = () => {
@@ -23,145 +23,93 @@ const ShopifyStore: React.FC = () => {
     setShowModal(!showModal);
   };
 
-  const handleAddProduct = async () => {
-    if (!imagem) {
-      toast.warn("Você deve adicionar uma imagem para o produto");
-      return;
-    }
-
-    if (nome === "") {
-      toast.warn("o nome do produto não pode estar vazio");
-      return;
-    }
-    if (descricao === "") {
-      toast.warn("a descrição do produto não pode estar vazio");
-      return;
-    }
-
-    if (preco === "") {
-      toast.warn("o preço do produto não pode estar vazio");
-      return;
-    }
-
-    if (quantidade === "") {
-      toast.warn("a quantidade não pode estar vazia");
-      return;
-    }
-
-    const response = await addProduct(
-      nome,
-      descricao,
-      preco,
-      quantidade,
-      imagem,
-    );
-    if (response.isOk) {
-      toast.success(`Produto ${nome} criado`);
-      setHost(true);
-    }
-    toggleModal();
+  const PayloadMap = {
+    name: "Nome da loja",
+    public_key: "Chave Pública",
+    secret_key: "Chave Secreta",
+    hostname: "Host da Loja",
   };
+
+  async function handleCreateStore(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const form = new FormData(event.target as HTMLFormElement);
+
+    const data = Object.fromEntries(form.entries());
+
+    for (const [key, value] of Object.entries(data)) {
+      if (value === "") {
+        toast.warn(
+          `O campo ${PayloadMap[key as keyof typeof PayloadMap]} não pode estar vazio`,
+        );
+        return;
+      }
+    }
+
+    const response = await CreateStore({
+      hostname: data["hostname"] as string,
+      name: data["name"] as string,
+    });
+
+    if (response.isOk) {
+      toast.success(
+        "Loja criada com sucesso, vamos redirecionar para a instalação da loja.",
+      );
+
+      window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/shopify?shop=${response?.data?.hostname}`;
+      return;
+    }
+
+    console.log(response);
+  }
 
   return (
     <DefaultLayout>
       <Dialog
-        header="Cadastrar novo produto"
+        header="Cadastrar nova loja (Shopify)"
         visible={showModal}
         onHide={toggleModal}
-        breakpoints={{ "960px": "75vw", "641px": "100vw" }}
+        // breakpoints={{ "960px": "75vw", "720px": "100vw" }}
       >
-        <div className="p-5">
+        <form className="w-full max-w-115 p-5" onSubmit={handleCreateStore}>
           <div className="mb-4">
             <label
-              htmlFor="nome"
+              htmlFor="name"
               className="text-gray-700 block text-sm font-medium"
             >
-              Nome:
+              Nome da Loja:
             </label>
             <input
               type="text"
-              id="nome"
-              name="nome"
-              value={nome}
-              onChange={(e) => setNome(e.target.value)}
+              id="name"
+              name="name"
               className="border-gray-300 mt-1 w-full rounded-md border p-2 focus:border-blue-500 focus:outline-none focus:ring-blue-500"
             />
           </div>
+
           <div className="mb-4">
             <label
-              htmlFor="descricao"
+              htmlFor="hostname"
               className="text-gray-700 block text-sm font-medium"
             >
-              Descrição:
-            </label>
-            <textarea
-              id="descricao"
-              name="descricao"
-              rows={3}
-              value={descricao}
-              onChange={(e) => setDescricao(e.target.value)}
-              className="border-gray-300 mt-1 w-full rounded-md border p-2 focus:border-blue-500 focus:outline-none focus:ring-blue-500"
-            ></textarea>
-          </div>
-          <div className="mb-4">
-            <label
-              htmlFor="preco"
-              className="text-gray-700 block text-sm font-medium"
-            >
-              Preço:
+              Host da loja:
             </label>
             <input
               type="text"
-              id="preco"
-              name="preco"
-              value={preco}
-              onChange={(e) => setPreco(e.target.value)}
+              id="hostname"
+              name="hostname"
               className="border-gray-300 mt-1 w-full rounded-md border p-2 focus:border-blue-500 focus:outline-none focus:ring-blue-500"
             />
           </div>
-          <div className="mb-4">
-            <label
-              htmlFor="quantidade"
-              className="text-gray-700 block text-sm font-medium"
-            >
-              Quantidade:
-            </label>
-            <input
-              type="number"
-              id="quantidade"
-              name="quantidade"
-              value={quantidade}
-              onChange={(e) => setQuantidade(e.target.value)}
-              className="border-gray-300 mt-1 w-full rounded-md border p-2 focus:border-blue-500 focus:outline-none focus:ring-blue-500"
-            />
-          </div>
-          <div className="mb-4">
-            <label
-              htmlFor="imagem"
-              className="text-gray-700 block text-sm font-medium"
-            >
-              Imagem:
-            </label>
-            <input
-              type="file"
-              id="imagem"
-              name="imagem"
-              accept="image/*"
-              onChange={(e) =>
-                setImagem(e.target.files ? e.target.files[0] : null)
-              }
-              className="border-gray-300 mt-1 w-full rounded-md border p-2 focus:border-blue-500 focus:outline-none focus:ring-blue-500"
-            />
-          </div>
+
           <div className="flex justify-end">
             <button
-              onClick={handleAddProduct}
+              type="submit"
               className="rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 focus:outline-none"
             >
-              Adicionar Produto
+              Adicionar Loja
             </button>
           </div>
-        </div>
+        </form>
       </Dialog>
       <div className="grid-cols-content mt-4 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
         <div>

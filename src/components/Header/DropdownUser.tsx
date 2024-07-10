@@ -1,12 +1,11 @@
-import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 
 const DropdownUser = () => {
-  const router = useRouter()
+  const router = useRouter();
   const [dropdownOpen, setDropdownOpen] = useState(false);
-const [logout, setLogout] = useState(false)
+  const [logout, setLogout] = useState(false);
   const trigger = useRef<any>(null);
   const dropdown = useRef<any>(null);
 
@@ -28,8 +27,8 @@ const [logout, setLogout] = useState(false)
 
   // close if the esc key is pressed
   useEffect(() => {
-    if(logout){
-      router.push("/")
+    if (logout) {
+      router.push("/");
     }
     const keyHandler = ({ keyCode }: KeyboardEvent) => {
       if (!dropdownOpen || keyCode !== 27) return;
@@ -40,10 +39,10 @@ const [logout, setLogout] = useState(false)
   });
 
   const Logout = () => {
-    localStorage.removeItem("@NativePay:token");
+    localStorage.removeItem("@NativePay:Token");
     localStorage.removeItem("@NativePay:name");
     setLogout(true);
-  }
+  };
 
   return (
     <div className="relative">
@@ -57,7 +56,6 @@ const [logout, setLogout] = useState(false)
           <span className="block text-sm font-medium text-black dark:text-white">
             {localStorage.getItem("@NativePay:name")}
           </span>
-
         </span>
 
         <svg
@@ -86,7 +84,10 @@ const [logout, setLogout] = useState(false)
           dropdownOpen === true ? "block" : "hidden"
         }`}
       >
-        <button onClick={Logout} className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
+        <button
+          onClick={Logout}
+          className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+        >
           <svg
             className="fill-current"
             width="22"

@@ -9,11 +9,11 @@ interface StoreResponse {
 export const PaginateStore = async (): Promise<StoreResponse> => {
   try {
     const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_URL}/wrapper/paginate`,
+      `${process.env.NEXT_PUBLIC_API_URL}/store/paginate`,
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("@NativePay:token")}`,
+          Authorization: `Bearer ${localStorage.getItem("@NativePay:Token")}`,
         },
       },
     );

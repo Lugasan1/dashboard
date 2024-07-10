@@ -1,10 +1,9 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import ChartOne from "../Charts/ChartOne";
-import ChartTwo from "../Charts/ChartTwo";
 import CardDataStats from "../CardDataStats";
 import CardDataStats2 from "../CardDataStats2";
-import { SoldProducts } from "@/app/dashboard/dashboard";
+import ChartOne from "../Charts/ChartOne";
+import ChartTwo from "../Charts/ChartTwo";
 
 interface SoldProduct {
   amount: string;
@@ -30,57 +29,50 @@ const ECommerce: React.FC = () => {
   });
 
   const GetSoldProducts = async () => {
-    try {
-      const response = await SoldProducts("100");
-      if (response.isOk) {
-        const soldProducts = response.message.soldProducts;
-
-        let arrayPrice: number[] = [];
-        soldProducts.data.forEach((element: SoldProduct) => {
-          arrayPrice.push(Number(element.amount));
-        });
-
-        let totalSum: number = arrayPrice.reduce(
-          (acc, currentValue) => acc + currentValue,
-          0
-        );
-
-        let formattedTotalSum: string = (totalSum / 100).toLocaleString(
-          "en-US",
-          {
-            minimumFractionDigits: 2,
-          }
-        );
-
-        setTotalProductSoldPrice(formattedTotalSum);
-
-        if (soldProducts && Array.isArray(soldProducts.data)) {
-          let soldData = soldProducts.data.length;
-          let ordenedArray: number[] = [];
-
-          while (soldData >= 0) {
-            ordenedArray.push(soldData);
-            soldData -= 5; // Decrementa o número por 5 em cada iteração
-          }
-
-          setChartState({
-            series: [
-              {
-                name: "Produtos Vendidos",
-                data: ordenedArray.reverse(),
-              },
-            ],
-          });
-          setTotalProductSold(soldProducts.data.length); // Use the correct length
-        } else {
-          console.error("Invalid sold products data format:", soldProducts);
-        }
-      } else {
-        console.error("Failed to fetch sold products data.");
-      }
-    } catch (error) {
-      console.error("Error fetching sold products data:", error);
-    }
+    // try {
+    //   const response = await SoldProducts("100");
+    //   if (response.isOk) {
+    //     const soldProducts = response.message.soldProducts;
+    //     let arrayPrice: number[] = [];
+    //     soldProducts.data.forEach((element: SoldProduct) => {
+    //       arrayPrice.push(Number(element.amount));
+    //     });
+    //     let totalSum: number = arrayPrice.reduce(
+    //       (acc, currentValue) => acc + currentValue,
+    //       0
+    //     );
+    //     let formattedTotalSum: string = (totalSum / 100).toLocaleString(
+    //       "en-US",
+    //       {
+    //         minimumFractionDigits: 2,
+    //       }
+    //     );
+    //     setTotalProductSoldPrice(formattedTotalSum);
+    //     if (soldProducts && Array.isArray(soldProducts.data)) {
+    //       let soldData = soldProducts.data.length;
+    //       let ordenedArray: number[] = [];
+    //       while (soldData >= 0) {
+    //         ordenedArray.push(soldData);
+    //         soldData -= 5; // Decrementa o número por 5 em cada iteração
+    //       }
+    //       setChartState({
+    //         series: [
+    //           {
+    //             name: "Produtos Vendidos",
+    //             data: ordenedArray.reverse(),
+    //           },
+    //         ],
+    //       });
+    //       setTotalProductSold(soldProducts.data.length); // Use the correct length
+    //     } else {
+    //       console.error("Invalid sold products data format:", soldProducts);
+    //     }
+    //   } else {
+    //     console.error("Failed to fetch sold products data.");
+    //   }
+    // } catch (error) {
+    //   console.error("Error fetching sold products data:", error);
+    // }
   };
 
   useEffect(() => {
@@ -90,7 +82,11 @@ const ECommerce: React.FC = () => {
   return (
     <>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-2 2xl:gap-7.5">
-        <CardDataStats title="Total em vendas ($)" total={totalProductSoldPrice} rate="">
+        <CardDataStats
+          title="Total em vendas ($)"
+          total={totalProductSoldPrice}
+          rate=""
+        >
           <svg
             className="fill-primary dark:fill-white"
             width="22"
