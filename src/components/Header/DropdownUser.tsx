@@ -1,8 +1,10 @@
+import { DashboardStore } from "@/hooks/dashboard.store";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 const DropdownUser = () => {
+  const { data } = DashboardStore();
   const router = useRouter();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [logout, setLogout] = useState(false);
@@ -54,7 +56,8 @@ const DropdownUser = () => {
       >
         <span className="hidden text-right lg:block">
           <span className="block text-sm font-medium text-black dark:text-white">
-            {localStorage.getItem("@NativePay:name")}
+            {data?.user?.name || "Administrador"}
+            {/* {localStorage.getItem("@NativePay:name")} */}
           </span>
         </span>
 
@@ -80,7 +83,7 @@ const DropdownUser = () => {
         ref={dropdown}
         onFocus={() => setDropdownOpen(true)}
         onBlur={() => setDropdownOpen(false)}
-        className={`absolute right-0 mt-4 flex w-62.5 flex-col rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark ${
+        className={`w-62.5 border-stroke shadow-default dark:border-strokedark dark:bg-boxdark absolute right-0 mt-4 flex flex-col rounded-sm border bg-white ${
           dropdownOpen === true ? "block" : "hidden"
         }`}
       >

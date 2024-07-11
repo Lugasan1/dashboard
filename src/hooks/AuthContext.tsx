@@ -1,11 +1,15 @@
+import { DashboardData } from "@/app/dashboard/dashboard";
 import { usePathname, useRouter } from "next/navigation";
 import React, {
   createContext,
   ReactNode,
+  useCallback,
   useContext,
   useEffect,
   useState,
 } from "react";
+import { toast } from "react-toastify";
+import { DashboardStore } from "./dashboard.store";
 
 type AuthContextType = {
   isAuthenticated: boolean;
@@ -25,7 +29,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
   const router = useRouter();
   const pathname = usePathname();
 
-  console.log("isAuthenticated:", isAuthenticated);
+  const { merge } = DashboardStore();
 
   useEffect(() => {
     const token = localStorage.getItem("@NativePay:Token");
@@ -45,25 +49,36 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
       "/auth/signup",
       "/auth/signin",
       "/products",
+      "/products/create",
       "/shopify-store",
       "/client-transaction",
       "/charges",
       "/dashboard",
+      "/stripe-credential",
+      "/shopify-credential",
     ];
 
-    console.log({
-      isAuthenticated,
-      publicPaths,
-      pathname,
-    });
-
     if (!isAuthenticated && !publicPaths.includes(pathname)) {
-      console.log(publicPaths.includes(pathname), isAuthenticated);
       localStorage.clear();
       sessionStorage.clear();
       router.push("/");
     }
   }, [isAuthenticated, pathname, router]);
+
+  const getData = useCallback(async () => {
+    const response = await DashboardData("10");
+
+    if (!response.isOk) {
+      toast.error("Houve um erro ao buscar os dados");
+      return;
+    }
+
+    merge(response.data!);
+  }, [merge]);
+
+  useEffect(() => {
+    getData();
+  }, [getData]);
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, logout }}>

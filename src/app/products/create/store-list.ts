@@ -1,15 +1,15 @@
 import axios from "axios";
-import { Product } from "./types";
+import { Store } from "./types";
 
-interface ProductsResponse {
+interface StoreResponse {
   isOk: boolean;
-  data?: Product[];
+  data?: Store[];
 }
 
-export const PaginateProducts = async (): Promise<ProductsResponse> => {
+export const StoreList = async (): Promise<StoreResponse> => {
   try {
     const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_URL}/product/paginate`,
+      `${process.env.NEXT_PUBLIC_API_URL}/store/list`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -19,9 +19,9 @@ export const PaginateProducts = async (): Promise<ProductsResponse> => {
     );
 
     if (response.status >= 200 && response.status < 400) {
-      return { isOk: true, data: response.data.data };
+      return { isOk: true, data: response.data };
     } else {
-      return { isOk: false, data: response.data.data };
+      return { isOk: false, data: response.data };
     }
   } catch (error) {
     if (axios.isAxiosError(error)) {

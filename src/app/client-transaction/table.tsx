@@ -32,9 +32,9 @@ const Table = ({ fetchData }: { fetchData: boolean }) => {
       </div>
 
       <div className="grid grid-cols-6 border-t border-stroke px-4 py-4.5 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5">
-        <div className="col-span-2 flex items-center">
+        {/* <div className="col-span-2 flex items-center">
           <p className="font-medium">Produto</p>
-        </div>
+        </div> */}
         <div className="col-span-2 flex items-center">
           <p className="font-medium">Cliente</p>
         </div>
@@ -54,13 +54,13 @@ const Table = ({ fetchData }: { fetchData: boolean }) => {
           className="grid grid-cols-6 border-t border-stroke px-4 py-4.5 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5"
           key={charge.id}
         >
-          <div className="col-span-2 flex items-center">
+          {/* <div className="col-span-2 flex items-center">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
               <p className="text-sm text-black dark:text-white">
                 {charge.product_name}
               </p>
             </div>
-          </div>
+          </div> */}
 
           <div className="col-span-2 flex items-center">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center">

@@ -1,29 +1,28 @@
 "use client";
-import { faCopy } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuShortcut,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Copy, Ellipsis } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { PaginateProducts } from "./paginate-product";
-
-interface ProductDataReq {
-  id: string;
-  name: string;
-  quantity: string;
-  photo: string;
-  description: string;
-  price: number;
-  link: string;
-}
+import { Product } from "./types";
 
 const Table = ({ fetchData }: { fetchData: boolean }) => {
-  const [productData, setProductData] = useState<ProductDataReq[]>([]);
+  const [productData, setProductData] = useState<Product[]>([]);
 
   const GetProducts = async () => {
     const response = await PaginateProducts();
     if (response.isOk) {
-      console.log(response.message);
-      setProductData(response.message);
+      setProductData(response.data!);
     }
   };
 
@@ -55,61 +54,112 @@ const Table = ({ fetchData }: { fetchData: boolean }) => {
           <p className="font-medium">Preço</p>
         </div>
         <div className="col-span-1 flex items-center">
-          <p className="font-medium">Link do checkout</p>
+          <p className="font-medium">Checkout</p>
         </div>
       </div>
 
-      {productData?.map((product, key) => (
-        <div
-          className="grid grid-cols-6 border-t border-stroke px-4 py-4.5 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5"
-          key={key}
-        >
-          <div className="col-span-3 flex items-center">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-              <div className="h-12.5 w-15 rounded-md">
-                <Image
-                  src={product.photo}
-                  width={60}
-                  height={50}
-                  alt="Product"
-                />
+      {productData?.map((product, key) => {
+        return (
+          <div
+            className="grid grid-cols-6 border-t border-stroke px-4 py-4.5 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5"
+            key={key}
+          >
+            <div className="col-span-3 flex items-center">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+                <div className="h-12.5 w-15 rounded-md">
+                  <Image
+                    src={product.photo}
+                    width={60}
+                    height={50}
+                    alt="Product"
+                  />
+                </div>
+                <p className="text-sm text-black dark:text-white">
+                  {product.name}
+                </p>
               </div>
+            </div>
+            <div className="col-span-2 hidden items-center sm:flex">
               <p className="text-sm text-black dark:text-white">
-                {product.name}
+                {product.description}
               </p>
             </div>
+            <div className="col-span-1 flex items-center">
+              <p className="text-sm text-black dark:text-white">
+                {product.price.toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                })}
+              </p>
+            </div>
+            <div className="col-span-1 flex items-center">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className=" bg-boxdark-2 ">
+                    <Ellipsis className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-full bg-boxdark-2">
+                  <DropdownMenuLabel>Link de checkout</DropdownMenuLabel>
+                  <DropdownMenuGroup>
+                    {product.prices.map((price) => {
+                      const PRODUCT_GENERATE_CHECKOUT_URL = `${process.env.NEXT_PUBLIC_API_URL}/stripe/checkout?price_id=${product.provider === "STRIPE" ? price.stripe_price_id : price.id}`;
+
+                      return (
+                        <DropdownMenuItem
+                          key={price.id}
+                          className="cursor-pointer space-x-2"
+                          onClick={() =>
+                            copyToClipboard(
+                              PRODUCT_GENERATE_CHECKOUT_URL,
+                              product.name,
+                            )
+                          }
+                        >
+                          {price.currency.toUpperCase() === "USD" && (
+                            <span className="font-bold ">
+                              {price.currency.toUpperCase()}
+                            </span>
+                          )}
+                          {price.currency.toUpperCase() === "BRL" && (
+                            <span className="font-bold ">
+                              {price.currency.toUpperCase()}
+                            </span>
+                          )}
+                          {price.currency.toUpperCase() === "EUR" && (
+                            <span className="font-bold ">
+                              {price.currency.toUpperCase()}
+                            </span>
+                          )}
+                          {price.currency.toUpperCase() === "GBP" && (
+                            <span className="font-bold ">
+                              {price.currency.toUpperCase()}
+                            </span>
+                          )}
+                          {product.provider === "STRIPE" && (
+                            <span>
+                              {price.stripe_price_id
+                                .replace("price_", "")
+                                .substring(0, 16)}
+                            </span>
+                          )}
+                          {product.provider === "SHOPIFY" && (
+                            <span>
+                              {product?.shopify_product_id?.substring(0, 16)}
+                            </span>
+                          )}
+                          <DropdownMenuShortcut>
+                            <Copy className="h-4 w-4" />
+                          </DropdownMenuShortcut>
+                        </DropdownMenuItem>
+                      );
+                    })}
+                  </DropdownMenuGroup>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
           </div>
-          <div className="col-span-2 hidden items-center sm:flex">
-            <p className="text-sm text-black dark:text-white">
-              {product.description}
-            </p>
-          </div>
-          <div className="col-span-1 flex items-center">
-            <p className="text-sm text-black dark:text-white">
-              ${" "}
-              {product.price.toLocaleString("en-US", {
-                minimumFractionDigits: 2,
-              })}
-            </p>
-          </div>
-          <div className="col-span-1 flex items-center">
-            <p className="text-sm text-black dark:text-white">
-              {product?.link?.substring(0, 10)}
-              <button
-                onClick={() =>
-                  copyToClipboard(
-                    `${process.env.NEXT_PUBLIC_DOMAIN}forms/form-elements?client=${product?.link || ""}&productQuantity=${product.quantity}&productName=${product.name}&price=${product.price}&image=${product.photo}`,
-                    product.name,
-                  )
-                }
-                className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 ml-2"
-              >
-                <FontAwesomeIcon icon={faCopy} />
-              </button>
-            </p>
-          </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 };

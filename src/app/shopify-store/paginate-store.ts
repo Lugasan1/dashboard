@@ -18,8 +18,6 @@ export const PaginateStore = async (): Promise<StoreResponse> => {
       },
     );
 
-    console.log(response.data.data);
-
     if (response.status >= 200 && response.status < 400) {
       return { isOk: true, data: response.data.data };
     } else {

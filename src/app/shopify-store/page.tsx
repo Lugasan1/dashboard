@@ -58,8 +58,6 @@ const ShopifyStore: React.FC = () => {
       window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/shopify?shop=${response?.data?.hostname}`;
       return;
     }
-
-    console.log(response);
   }
 
   return (
@@ -70,11 +68,11 @@ const ShopifyStore: React.FC = () => {
         onHide={toggleModal}
         // breakpoints={{ "960px": "75vw", "720px": "100vw" }}
       >
-        <form className="w-full max-w-115 p-5" onSubmit={handleCreateStore}>
+        <form className="max-w-115 w-full p-5" onSubmit={handleCreateStore}>
           <div className="mb-4">
             <label
               htmlFor="name"
-              className="text-gray-700 block text-sm font-medium"
+              className="block text-sm font-medium text-gray-700"
             >
               Nome da Loja:
             </label>
@@ -82,14 +80,14 @@ const ShopifyStore: React.FC = () => {
               type="text"
               id="name"
               name="name"
-              className="border-gray-300 mt-1 w-full rounded-md border p-2 focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+              className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:outline-none focus:ring-blue-500"
             />
           </div>
 
           <div className="mb-4">
             <label
               htmlFor="hostname"
-              className="text-gray-700 block text-sm font-medium"
+              className="block text-sm font-medium text-gray-700"
             >
               Host da loja:
             </label>
@@ -97,7 +95,8 @@ const ShopifyStore: React.FC = () => {
               type="text"
               id="hostname"
               name="hostname"
-              className="border-gray-300 mt-1 w-full rounded-md border p-2 focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+              placeholder="example.myshopify.com"
+              className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:outline-none focus:ring-blue-500"
             />
           </div>
 
@@ -111,7 +110,7 @@ const ShopifyStore: React.FC = () => {
           </div>
         </form>
       </Dialog>
-      <div className="grid-cols-content mt-4 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
+      <div className="grid-cols-content 2xl:mt-7.5 2xl:gap-7.5 mt-4 gap-4 md:mt-6 md:gap-6">
         <div>
           <button
             onClick={toggleModal}

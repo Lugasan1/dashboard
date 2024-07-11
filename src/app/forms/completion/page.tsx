@@ -1,22 +1,21 @@
-"use client"
+"use client";
+import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
-import { useRouter } from 'next/navigation'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCheckCircle } from '@fortawesome/free-solid-svg-icons'
 
 const Completion: React.FC = () => {
   const router = useRouter();
 
   useEffect(() => {
     setTimeout(() => {
-        router.push("/dashboard")
-    }, 5000)
-    
-  },[])
+      router.push("/dashboard");
+    }, 5000);
+  }, [router]);
 
   return (
-    <div className="p-5 h-screen flex justify-center items-center">
-      <div className=" p-10 rounded-sm border border-stroke bg-graydark shadow-default dark:border-strokedark dark:bg-boxdark text-center">
+    <div className="flex h-screen items-center justify-center p-5">
+      <div className=" rounded-sm border border-stroke bg-graydark p-10 text-center shadow-default dark:border-strokedark dark:bg-boxdark">
         {/*<Link className="mb-5.5 inline-block" href="/">
           <Image
             className="hidden dark:block"
@@ -38,9 +37,9 @@ const Completion: React.FC = () => {
           <FontAwesomeIcon icon={faCheckCircle} size="5x" color="#6EE7B7" />
         </span>
 
-        <h2 className="mt-5 text-2xl font-bold text-white dark:text-white sm:text-title-xl2">Pagamento Aprovado</h2>
-        
-       
+        <h2 className="mt-5 text-2xl font-bold text-white dark:text-white sm:text-title-xl2">
+          Pagamento Aprovado
+        </h2>
       </div>
     </div>
   );
