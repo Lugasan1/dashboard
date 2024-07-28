@@ -7,6 +7,7 @@ import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { PostRegister } from "./register";
+import { getErrorMessage } from "@/utils/error"
 
 interface RegisterResponse {
   token: string;
@@ -60,12 +61,14 @@ const SignUp: React.FC = () => {
    const response = await PostRegister(name, email, password);
  
    if (response.isOk) {
-     localStorage.setItem("@NativePay:id", response.message.id);
-     setBackRoute(true)
+    localStorage.setItem("@NativePay:id", response.message.id);
+    setBackRoute(true)
    } else {
-     toast.error("Falha no cadastro: " + (typeof response.message === 'string' ? response.message : response.message.error), {
-       position: "top-right"
-     });
+    const error = getErrorMessage(response)
+    
+    toast.error("Falha no cadastro: " + error, {
+      position: "top-right"
+    });
    }
  };
 

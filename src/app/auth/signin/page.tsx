@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { PostLogin } from "./auth";
+import { getErrorMessage } from "@/utils/error";
 
 interface LoginResponse {
   token: string;
@@ -43,15 +44,11 @@ const SignIn: React.FC = () => {
       localStorage.setItem("@NativePay:name", response.message.name);
       setLogged(true);
     } else {
-      toast.error(
-        "Falha no login: " +
-          (typeof response.message === "string"
-            ? response.message
-            : response.message.error),
-        {
-          position: "top-right",
-        },
-      );
+      const error = getErrorMessage(response)
+    
+      toast.error("Falha no login: " + error, {
+        position: "top-right"
+      });
     }
   };
 

@@ -4,6 +4,7 @@ interface RegisterResponse {
   error?: string;
   id: string;
   auth?: boolean;
+  message?: string;
 }
 
 interface PostRegisterResponse {
